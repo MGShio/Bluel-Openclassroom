@@ -7,20 +7,18 @@ fetch("http://localhost:5678/api/works")
         displayProjects(data);
     });
 
-function displayProjects(projects) 
-{
-    const createGallery = () => 
-    {
-        const gallery = /*html*/
+function displayProjects(projects) {
+    const createGallery = () => {
+        const gallery = /*html*/ `
             <div class="gallery">
-                ${projects.map((project) => /*html*/
+                ${projects.map((project) => /*html*/ `
                     <figure>
-                        <img src="${project.imageurl}" alt="${project.title}" />
+                        <img src="${project.imageUrl}" alt="${project.title}" />
                         <figcaption>${project.title}</figcaption>
                     </figure>
-                ).join('')}
+                `).join('')}
             </div>
-        ;
+        `;
 
         // Cherche la section avec l'id "portfolio"
         const portfolioSection = document.getElementById('portfolio');
@@ -30,9 +28,10 @@ function displayProjects(projects)
         if (existingGallery) {
             existingGallery.outerHTML = gallery;
         } else {
-            // Sinon, ajoute la nouvelle galerie à l'interieur de la section "portfolio"
+            // Sinon, ajoute la nouvelle galerie à l'intérieur de la section "portfolio"
             portfolioSection.insertAdjacentHTML('beforeend', gallery);
         }
     };
-}
+
     createGallery(); // Appel de la fonction createGallery pour créer la galerie d'images
+}

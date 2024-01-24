@@ -5,21 +5,17 @@ fetch('http://localhost:5678/api/works')
 
         // Utilise map pour générer la structure HTML pour chaque catégorie
         const buttonsHtml = categories.map(category => {
-            return /*html*/
-                <button class="filter">${category.name}</button>
-                ;
+            return '<button class="filter">' + category.name + '</button>';
         }).join('');
 
         // Ajoute le bouton "Tous" en tant que premier bouton
-        const allButtonHtml = /*html*/
-            <button class="filter filter-selected">Tous</button>
-        ;
+        const allButtonHtml = '<button class="filter filter-selected">Tous</button>';
 
         // Crée la structure complète en combinant le bouton "Tous" avec les boutons de catégories
-        const filterButtonsHtml = allButtonHtml + buttonsHtml ;
+        const filterButtonsHtml = allButtonHtml + buttonsHtml;
 
         // Utilise innerHTML pour mettre à jour le contenu de la div filter-buttons
-        filterButtons.innerHTML = filterButtonsHtml ;
+        filterButtons.innerHTML = filterButtonsHtml;
 
         // Récupère tous les boutons de filtre
         const buttons = document.querySelectorAll('.filter-buttons button');
@@ -34,18 +30,18 @@ fetch('http://localhost:5678/api/works')
                 filterProjects(categoryId, button);
             })
         })
-    })
+    });
 
-    function filterProjects(categoryId, selectedButton) {
-        const filteredProjects = !categoryId ? allProjects : allProjects.filter(project => project.categoryId === categoryId);
-        displayProjects(filteredProjects);
-        setSelectedFilter(selectedButton);
-    }
+function filterProjects(categoryId, selectedButton) {
+    const filteredProjects = !categoryId ? allProjects : allProjects.filter(project => project.categoryId === categoryId);
+    displayProjects(filteredProjects);
+    setSelectedFilter(selectedButton);
+}
 
-    function setSelectedFilter(selectedButton) {
-        const buttons = document.querySelectorAll('.filter-buttons button');
-        buttons.forEach(button => {
-            button.classList.remove('filter-selected');
-        });
-        selectedButton.classList.add('filter-selected');
-    }
+function setSelectedFilter(selectedButton) {
+    const buttons = document.querySelectorAll('.filter-buttons button');
+    buttons.forEach(button => {
+        button.classList.remove('filter-selected');
+    });
+    selectedButton.classList.add('filter-selected');
+}
