@@ -1,4 +1,4 @@
-fetch('http://localhost:xxx/xxxxx/xxx')
+fetch('http://localhost:5678/api/works')
     .then(response => response.json())
     .then(categories => {
         const filterButtons = document.querySelector('.filter-buttons');
