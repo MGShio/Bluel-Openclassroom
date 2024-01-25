@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function () {
+
 fetch('http://localhost:5678/api/works')
     .then(response => response.json())
     .then(categories => {
@@ -45,3 +47,4 @@ function setSelectedFilter(selectedButton) {
     });
     selectedButton.classList.add('filter-selected');
 }
+})

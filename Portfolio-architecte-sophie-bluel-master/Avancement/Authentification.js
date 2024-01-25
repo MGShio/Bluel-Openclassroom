@@ -1,4 +1,6 @@
 // Création de la fonction de connexion
+document.addEventListener('DOMContentLoaded', function () {
+
 async function sendId() {
     const formId = document.querySelector(".login_form");
     const errorMessage = document.querySelector(".error-message");
@@ -55,3 +57,4 @@ async function sendId() {
         });
     }
 }
+})

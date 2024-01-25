@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function () {
+
 let allProjects = [];
 
 fetch("http://localhost:5678/api/works")
@@ -35,3 +37,4 @@ function displayProjects(projects) {
 
     createGallery(); // Appel de la fonction createGallery pour créer la galerie d'images
 }
+})
