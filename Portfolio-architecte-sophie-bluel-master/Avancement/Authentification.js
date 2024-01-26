@@ -1,14 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
-    async function sendId() {
-        const formId = document.querySelector("#user-login-form"); // Update to use form id
-        const errorMessage = document.querySelector(".error-message");
 
-        // Vérification de la présence du formulaire
+    // Define the handleSuccessfulAuthentication function
+    function handleSuccessfulAuthentication(result) {
+        // Your logic here, for example:
+        console.log("Handling successful authentication:", result);
+        // Additional actions you want to perform on successful authentication
+    }
+
+    async function sendId() {
+        const formId = document.querySelector("#user-login-form");
+
         if (formId) {
             formId.addEventListener("submit", async function(event) {
                 event.preventDefault();
 
-                //Récupération des valeurs du formulaire d'identification
                 const email = document.querySelector("#email").value;
                 const password = document.querySelector("#password").value;
 
@@ -18,44 +23,38 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
 
                 try {
-                    // Appel de la fonction fetch avec toutes les informations nécessaires
                     const response = await fetch("http://localhost:5678/api/users/login", {
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify(user)
                     });
-
-                    // Vérification de la réponse
+                
                     if (response.status === 401) {
-                        errorMessage.textContent = "Erreur, utilisateur ou mot de passe incorrect.";
-                        errorMessage.style.display = "block";
+                        // Handle 401 unauthorized
                     } else if (response.status === 404) {
-                        errorMessage.textContent = "Erreur, utilisateur ou mot de passe incorrect.";
-                        errorMessage.style.display = "block";
+                        // Handle 404 not found
                     } else if (response.ok) {
-                        // Si la réponse est réussie, extraction des données en JSON
                         const result = await response.json();
+                
+                        console.log("Authentication successful. Token:", result.token);
 
-                        // Vérification du token
                         if (result && result.token) {
-                            // Stockage du token dans le local storage
                             localStorage.setItem("token", result.token);
 
-                            // Redirection vers la page d'accueil
-                            window.location.href = "index.html";
+                            // Call the handleSuccessfulAuthentication function
+                            handleSuccessfulAuthentication(result);
 
-                            // Changement du texte du lien une fois connecté
+                            window.location.href = "index.html";
                             deconnect();
                         }
                     }
                 } catch (error) {
-                    // Message en cas d'erreurs de requête ou de connexion
-                    console.error("Erreur lors de la requête d'authentification:", error);
+                    console.error("Error during authentication request:", error);
                 }
+                
             });
         }
     }
 
-    // Call the function to enable the login functionality
     sendId();
 });
