@@ -1,50 +1,45 @@
-document.addEventListener('DOMContentLoaded', function () {
-
-fetch('http://localhost:5678/api/works')
-    .then(response => response.json())
-    .then(categories => {
-        const filterButtons = document.querySelector('.filter-buttons');
-
-        // Utilise map pour générer la structure HTML pour chaque catégorie
-        const buttonsHtml = categories.map(category => {
-            return '<button class="filter">' + category.name + '</button>';
-        }).join('');
-
-        // Ajoute le bouton "Tous" en tant que premier bouton
-        const allButtonHtml = '<button class="filter filter-selected">Tous</button>';
-
-        // Crée la structure complète en combinant le bouton "Tous" avec les boutons de catégories
-        const filterButtonsHtml = allButtonHtml + buttonsHtml;
-
-        // Utilise innerHTML pour mettre à jour le contenu de la div filter-buttons
-        filterButtons.innerHTML = filterButtonsHtml;
-
-        // Récupère tous les boutons de filtre
-        const buttons = document.querySelectorAll('.filter-buttons button');
-
-        // Ajoute un event listener à chaque bouton de filtre
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Si le bouton "Tous" est cliqué (avec la classe "filter-selected"), on appelle "filterProjects" avec categoryId à null.
-                // Sinon, on recherche l'id de la catégorie associée et on appelle "filterProjects" avec cet id pour filter les projects
-                // par catégorie
-                const categoryId = button.classList.contains('filter-selected') ? null : categories.find(category => category.name === button.textContent)?.id;
-                filterProjects(categoryId, button);
-            })
-        })
-    });
-
-function filterProjects(categoryId, selectedButton) {
-    const filteredProjects = !categoryId ? allProjects : allProjects.filter(project => project.categoryId === categoryId);
-    displayProjects(filteredProjects);
-    setSelectedFilter(selectedButton);
-}
-
-function setSelectedFilter(selectedButton) {
-    const buttons = document.querySelectorAll('.filter-buttons button');
-    buttons.forEach(button => {
-        button.classList.remove('filter-selected');
-    });
-    selectedButton.classList.add('filter-selected');
-}
+// Adding filters of categories to filter work in the gallery
+// Getting existing categories from api
+fetch("http://localhost:5678/api/categories")
+.then(function(response) {
+	if(response.ok) {
+		return response.json();
+	}
 })
+.then(function(data) {
+	let categories = data;
+	categories.unshift({id: 0, name: 'Tous'});
+	console.log(categories);
+	// Looping on each category
+	categories.forEach((category, index) => {
+		// Creation <button> to filter
+		let myButton = document.createElement('button');
+		myButton.classList.add('work-filter');
+		myButton.classList.add('filters-design');
+		if(category.id === 0) myButton.classList.add('filter-active', 'filter-all');
+		myButton.setAttribute('data-filter', category.id);
+		myButton.textContent = category.name;
+		// Adding the new <button> into the existing div.filters
+		document.querySelector("div.filters").appendChild(myButton);
+		// Click event <buttton> to filter
+		myButton.addEventListener('click', function(event) {
+			event.preventDefault();
+			// Handling filters
+			document.querySelectorAll('.work-filter').forEach((workFilter) => {
+				workFilter.classList.remove('filter-active');
+			});
+			event.target.classList.add('filter-active');
+			// Handling works
+			let categoryId = myButton.getAttribute('data-filter');
+			document.querySelectorAll('.work-item').forEach(workItem => {
+				workItem.style.display = 'none';
+			});
+			document.querySelectorAll(`.work-item.category-id-${categoryId}`).forEach(workItem => {
+				workItem.style.display = 'block';
+			});
+		});
+	});
+})
+.catch(function(err) {
+	console.log(err);
+});

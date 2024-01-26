@@ -14,64 +14,61 @@ document.addEventListener('DOMContentLoaded', function () {
         let introduction = document.getElementById('space-introduction-in-mode-admin');
         introduction.style.marginTop = "-50px";
     }
+    
+    const modalClose = document.querySelector('.modal-close');
+
+    // Check if modalClose is not null before adding the event listener
+    if (modalClose) {
+        modalClose.addEventListener('click', closeModal);
+    }
 
     // Cliquer sur déconnexion pour se déconnecter
-    document.getElementById('nav-logout').addEventListener('click', function (event) {
-        event.preventDefault();
-        localStorage.removeItem('userId');
-        localStorage.removeItem('token');
-        // Changer la présentation de la page lorsque l'administrateur est déconnecté
-        document.querySelector('body').classList.remove(`connecté`);
-        let topBar = document.getElementById('top-bar');
-        topBar.style.display = "none";
-        let filters = document.getElementById('all-filters');
-        filters.style.display = "flex";
-        let space = document.getElementById('space-only-admin');
-        space.style.paddingBottom = "0";
-    });
+    const logoutButton = document.getElementById('nav-logout');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            localStorage.removeItem('userId');
+            localStorage.removeItem('token');
+            // Changer la présentation de la page lorsque l'administrateur est déconnecté
+            document.querySelector('body').classList.remove(`connecté`);
+            let topBar = document.getElementById('top-bar');
+            topBar.style.display = "none";
+            let filters = document.getElementById('all-filters');
+            filters.style.display = "flex";
+            let space = document.getElementById('space-only-admin');
+            space.style.paddingBottom = "0";   
+        });
+}
 
     // Ouvrir la modal avec le bouton "modifier" en mode administrateur, pour voir tous les travaux
     document.getElementById('update-works').addEventListener('click', function (event) {
         event.preventDefault();
-        // Nouvelle requête pour ajouter tous les travaux dans la modalité de travail
+        // New code for updating works
         fetch("http://localhost:5678/api/works")
-            .then(function (response) {
-                if (response.ok) {
-                    return response.json();
-                }
-            })
-            .then(function (data) {
+            .then(response => response.json())
+            .then(data => {
                 let works = data;
-                // Suppression des anciens travaux
                 document.querySelector('#modal-works.modal-gallery .modal-content').innerText = '';
-                // Boucle sur chaque travail
                 works.forEach((work, index) => {
-                    // Création de la balise <figure>
                     let myFigure = document.createElement('figure');
                     myFigure.setAttribute('class', `work-item category-id-0 category-id-${work.categoryId}`);
                     myFigure.setAttribute('id', `work-item-popup-${work.id}`);
-                    // Création de la balise <img>
                     let myImg = document.createElement('img');
                     myImg.setAttribute('src', work.imageUrl);
                     myImg.setAttribute('alt', work.title);
                     myFigure.appendChild(myImg);
-                    // Création de la balise <figcaption>
                     let myFigCaption = document.createElement('figcaption');
                     myFigCaption.textContent = 'éditer';
                     myFigure.appendChild(myFigCaption);
-                    // Création de l'icône de croix
                     let crossDragDrop = document.createElement('i');
                     crossDragDrop.classList.add('fa-solid', 'fa-arrows-up-down-left-right', 'cross');
                     myFigure.appendChild(crossDragDrop);
-                    // Création de l'icône de corbeille
                     let trashIcon = document.createElement('i');
                     trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash');
                     myFigure.appendChild(trashIcon);
-                    // Gestion de la suppression
                     trashIcon.addEventListener('click', function (event) {
                         event.preventDefault();
                         if (confirm("Voulez-vous supprimer cet élément ?")) {
-                            // Requête pour supprimer le travail dans la modalité de travail et dans la galerie du portfolio de la page
                             fetch(`http://localhost:5678/api/works/${work.id}`, {
                                 method: 'DELETE',
                                 headers: {
@@ -79,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                                 }
                             })
-                                .then(function (response) {
+                                .then(response => {
                                     switch (response.status) {
                                         case 500:
                                         case 503:
@@ -91,10 +88,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                         case 200:
                                         case 204:
                                             console.log("Projet supprimé.");
-                                            // Suppression du travail de la page
                                             document.getElementById(`work-item-${work.id}`).remove();
                                             console.log(`work-item-${work.id}`);
-                                            // Suppression du travail de la popup
                                             document.getElementById(`work-item-popup-${work.id}`).remove();
                                             console.log(`work-item-popup-${work.id}`);
                                             break;
@@ -103,24 +98,23 @@ document.addEventListener('DOMContentLoaded', function () {
                                             break;
                                     }
                                 })
-                                .catch(function (err) {
+                                .catch(err => {
                                     console.log(err);
                                 });
                         }
                     });
-                    // Ajout de la nouvelle balise <figure> dans la div.modal-content existante
                     document.querySelector("div.modal-content").appendChild(myFigure);
-                    // Ouverture de la modalité de travail
                     let modal = document.getElementById('modal');
                     modal.style.display = "flex";
                     let modalWorks = document.getElementById('modal-works');
                     modalWorks.style.display = "block";
                 });
             })
-            .catch(function (err) {
+            .catch(err => {
                 console.log(err);
             });
     });
+
 
     // Gestion de la fermeture de la modalité lors du clic à l'extérieur
     // La modalité de travail ne peut pas se fermer si vous cliquez à l'intérieur de son contenu
