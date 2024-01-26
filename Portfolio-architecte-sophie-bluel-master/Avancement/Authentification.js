@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // Vérification de la réponse
                     if (response.status === 401) {
-                        errorMessage.textContent = "Erreur, mot de passe incorrect.";
+                        errorMessage.textContent = "Erreur, utilisateur ou mot de passe incorrect.";
                         errorMessage.style.display = "block";
                     } else if (response.status === 404) {
-                        errorMessage.textContent = "Erreur, utilisateur inconnu.";
+                        errorMessage.textContent = "Erreur, utilisateur ou mot de passe incorrect.";
                         errorMessage.style.display = "block";
                     } else if (response.ok) {
                         // Si la réponse est réussie, extraction des données en JSON
