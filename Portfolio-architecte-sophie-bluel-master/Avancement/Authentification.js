@@ -31,8 +31,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                     if (response.status === 401) {
                         // Handle 401 unauthorized
+                        errorMessage.textContent = "Erreur, mot de passe ou utilisateur incorrect.";
+                        errorMessage.style.display = "block";
                     } else if (response.status === 404) {
                         // Handle 404 not found
+                        errorMessage.textContent = "Erreur, mot de passe ou utilisateur incorrect.";
+                        errorMessage.style.display = "block";
                     } else if (response.ok) {
                         const result = await response.json();
                 
@@ -46,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             window.location.href = "index.html";
                             deconnect();
+
+                             // Vérification de la réponse
                         }
                     }
                 } catch (error) {

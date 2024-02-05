@@ -1,5 +1,7 @@
 // Adding filters of categories to filter work in the gallery
 // Getting existing categories from api
+document.addEventListener('DOMContentLoaded', function () {
+
 fetch("http://localhost:5678/api/categories")
 .then(function(response) {
 	if(response.ok) {
@@ -43,3 +45,4 @@ fetch("http://localhost:5678/api/categories")
 .catch(function(err) {
 	console.log(err);
 });
+})

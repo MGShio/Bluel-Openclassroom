@@ -1,4 +1,6 @@
 // Création de la fonction de déconnexion
+document.addEventListener('DOMContentLoaded', function () {
+
 function deconnect() {
     const loginLink = document.querySelector(".loginlogout");
 
@@ -22,3 +24,4 @@ function deconnect() {
         }
     }
 }
+})
