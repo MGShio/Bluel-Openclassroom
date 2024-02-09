@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(user),
         })
+        //Error code with specific information
         .then(function(response) {
             switch(response.status) {
                 case 500:
