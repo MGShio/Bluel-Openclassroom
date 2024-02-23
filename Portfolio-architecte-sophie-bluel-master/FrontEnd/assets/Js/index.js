@@ -161,7 +161,6 @@ document.addEventListener('DOMContentLoaded', function() {
 						.then(function(response) {
 							switch(response.status) {
 								case 500:
-								case 503:
 									alert("Comportement inattendu!");
 								break;
 								case 401:
@@ -372,7 +371,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			.then(function(response) {
 				switch(response.status) {
 					case 500:
-					case 503:
 						alert("Erreur inattendue!");
 						break;
 					case 400:

@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(function(response) {
             switch(response.status) {
                 case 500:
-                case 503:
                     alert("Erreur côté serveur!");
                 break;
                 case 401:
+                    alert("Email ou mot de passe incorrect!");
                 case 404:
                     alert("Email ou mot de passe incorrect!");
                 break;
